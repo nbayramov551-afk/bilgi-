@@ -3,167 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>X-NEURAL OMEGA | WORLD EDITION</title>
+    <title>X-NEURAL TITAN | SUPREMACY</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --neon: #00ffff; --magenta: #ff00ff; --gold: #ffd700; --bg: #000; --glass: rgba(255,255,255,0.07); }
+        :root { --neon: #00ffff; --magenta: #ff00ff; --gold: #ffd700; --bg: #000205; --glass: rgba(0, 255, 255, 0.03); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; height: 100vh; overflow: hidden; }
 
-        /* Cyber Background */
-        .grid-bg { position: fixed; inset: 0; background-image: linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px); background-size: 40px 40px; z-index: -1; }
-        .glow-sphere { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,255,255,0.1) 0%, transparent 70%); z-index: -1; }
+        /* Cybernetic Background */
+        .titan-grid { position: fixed; inset: 0; background-image: linear-gradient(var(--glass) 1px, transparent 1px), linear-gradient(90deg, var(--glass) 1px, transparent 1px); background-size: 30px 30px; z-index: -1; }
+        .glow-overlay { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(0,255,255,0.05) 0%, transparent 80%); z-index: -1; }
 
-        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--neon); background: rgba(0,0,0,0.9); }
-        .logo { font-family: 'Orbitron'; color: var(--neon); font-size: 1.1rem; font-weight: 900; letter-spacing: 3px; }
+        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--neon); background: rgba(0,0,0,0.9); box-shadow: 0 0 30px rgba(0,255,255,0.2); }
+        .logo { font-family: 'Orbitron'; font-weight: 900; letter-spacing: 3px; font-size: 1.2rem; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
 
-        /* Advanced Settings Panel */
-        .settings-card { margin: 15px; padding: 15px; background: var(--glass); border: 1px solid rgba(0,255,255,0.15); border-radius: 15px; backdrop-filter: blur(10px); }
-        .label { font-family: 'Orbitron'; font-size: 0.6rem; color: var(--gold); margin-bottom: 8px; display: block; letter-spacing: 1px; }
+        /* Language Panel */
+        .settings-container { margin: 15px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(0,255,255,0.1); border-radius: 20px; backdrop-filter: blur(10px); }
+        .label { font-family: 'Orbitron'; font-size: 0.6rem; color: var(--gold); margin-bottom: 10px; display: block; letter-spacing: 2px; }
         
-        #lang { width: 100%; background: #080808; color: #fff; border: 1px solid var(--neon); padding: 12px; border-radius: 10px; font-size: 0.95rem; font-family: 'Rajdhani'; font-weight: 700; }
+        #lang { width: 100%; background: #000; color: #fff; border: 1px solid var(--neon); padding: 12px; border-radius: 12px; font-size: 0.9rem; font-family: 'Rajdhani'; font-weight: 700; }
 
-        /* Main Engine Room */
-        .engine-room { height: 45vh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-        .wave { position: absolute; width: 150px; height: 150px; border: 1px solid var(--neon); border-radius: 50%; opacity: 0; }
-        .active .wave { animation: pulse-ring 1.5s infinite; opacity: 1; }
-        @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 0.8; } 100% { transform: scale(1.6); opacity: 0; } }
+        /* Mic Engine */
+        .engine-container { height: 42vh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        .mic-wrapper { position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; }
+        
+        .pulse-ring { position: absolute; width: 100%; height: 100%; border: 2px solid var(--neon); border-radius: 50%; opacity: 0; }
+        .active .pulse-ring { animation: hyper-pulse 1.5s infinite; opacity: 1; }
+        @keyframes hyper-pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.8); opacity: 0; } }
 
-        .mic-btn { width: 110px; height: 110px; border-radius: 50%; background: #000; border: 3px solid var(--neon); color: var(--neon); font-size: 3rem; z-index: 10; transition: 0.3s; box-shadow: 0 0 15px var(--neon); }
-        .active .mic-btn { border-color: var(--magenta); color: var(--magenta); box-shadow: 0 0 30px var(--magenta); }
+        .mic-btn { width: 110px; height: 110px; border-radius: 50%; background: #000; border: 3px solid var(--neon); color: var(--neon); font-size: 3.5rem; z-index: 10; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 0 20px rgba(0,255,255,0.3); }
+        .active .mic-btn { border-color: var(--magenta); color: var(--magenta); box-shadow: 0 0 40px var(--magenta); transform: scale(0.9); }
 
-        #status-text { margin-top: 25px; font-family: 'Orbitron'; font-size: 0.7rem; color: var(--neon); letter-spacing: 2px; }
+        #status { margin-top: 30px; font-family: 'Orbitron'; font-size: 0.75rem; color: var(--neon); letter-spacing: 2px; text-transform: uppercase; }
 
-        /* Result HUD */
-        #hud { position: fixed; inset: 0; top: 10%; background: rgba(0,0,0,0.98); border-top: 4px solid var(--neon); border-radius: 30px 30px 0 0; transform: translateY(110%); transition: 0.5s ease-out; z-index: 1000; }
+        /* HUD Results */
+        #hud { position: fixed; inset: 0; top: 12%; background: rgba(0,4,8,0.98); border-top: 4px solid var(--magenta); border-radius: 40px 40px 0 0; transform: translateY(110%); transition: 0.5s ease-out; z-index: 2000; }
         #hud.active { transform: translateY(0); }
-        .hud-scroll { padding: 25px; height: 75%; overflow-y: auto; }
+        .hud-scroll { padding: 30px; height: 70%; overflow-y: auto; }
         
-        .res-box { background: rgba(255,255,255,0.04); padding: 18px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid var(--magenta); }
-        .res-box h5 { margin: 0; font-family: 'Orbitron'; font-size: 0.55rem; color: var(--gold); }
-        .res-box p { margin: 8px 0 0; font-size: 1.3rem; font-weight: 700; color: #fff; }
+        .result-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 18px; margin-bottom: 20px; border-left: 5px solid var(--neon); }
+        .result-card h4 { margin: 0; font-family: 'Orbitron'; font-size: 0.6rem; color: var(--gold); }
+        .result-card p { margin: 10px 0 0; font-size: 1.4rem; font-weight: 700; line-height: 1.4; color: #fff; }
 
-        /* Actions */
-        .bottom-actions { position: absolute; bottom: 0; width: 100%; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: #000; }
-        .btn { padding: 16px; border-radius: 10px; border: none; font-family: 'Orbitron'; font-weight: 900; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-play { background: var(--neon); color: #000; }
+        /* Footer Buttons */
+        .footer-btns { position: absolute; bottom: 0; width: 100%; padding: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #000; border-top: 1px solid #111; }
+        .btn-action { padding: 18px; border-radius: 15px; border: none; font-family: 'Orbitron'; font-weight: 900; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
+        .btn-play { background: var(--neon); color: #000; box-shadow: 0 0 15px rgba(0,255,255,0.4); }
         .btn-share { background: transparent; border: 2px solid #25D366; color: #25D366; }
     </style>
 </head>
 <body>
-    <div class="grid-bg"></div>
-    <div class="glow-sphere"></div>
+    <div class="titan-grid"></div>
+    <div class="glow-overlay"></div>
     
     <header>
-        <div class="logo">X-NEURAL OMEGA</div>
-        <i class="fas fa-globe-americas" style="color:var(--neon)"></i>
+        <div class="logo">X-NEURAL TITAN</div>
+        <i class="fas fa-shield-halved" style="color:var(--magenta)"></i>
     </header>
 
-    <div class="settings-card">
-        <span class="label"><i class="fas fa-map-marker-alt"></i> WORLD LANGUAGE DATABASE</span>
+    <div class="settings-container">
+        <span class="label">NEURAL LANGUAGE DATABASE</span>
         <select id="lang">
-            <optgroup label="Əsas Dillər">
-                <option value="en">🇺🇸 ENGLISH (USA / UK)</option>
-                <option value="tr">🇹🇷 TÜRKÇE (TÜRKİYE)</option>
-                <option value="ru">🇷🇺 РУССКИЙ (RUSSIA)</option>
-                <option value="de">🇩🇪 DEUTSCH (GERMANY)</option>
-                <option value="fr">🇫🇷 FRANÇAIS (FRANCE)</option>
+            <optgroup label="Təcili / Populyar">
+                <option value="tr">🇹🇷 TÜRKİYE (Türkçe)</option>
+                <option value="en">🇺🇸 USA / UK (English)</option>
+                <option value="ru">🇷🇺 RUSSIA (Русский)</option>
+                <option value="uk">🇺🇦 UKRAINE (Українська)</option>
+                <option value="de">🇩🇪 GERMANY (Deutsch)</option>
             </optgroup>
             <optgroup label="Avropa">
-                <option value="it">🇮🇹 ITALIANO (ITALY)</option>
-                <option value="es">🇪🇸 ESPAÑOL (SPAIN)</option>
-                <option value="pt">🇵🇹 PORTUGUÊS (PORTUGAL)</option>
-                <option value="nl">🇳🇱 NEDERLANDS (NETHERLANDS)</option>
-                <option value="pl">🇵🇱 POLSKI (POLAND)</option>
-                <option value="sv">🇸🇪 SVENSKA (SWEDEN)</option>
-                <option value="uk">🇺🇦 UKRAINIAN (UKRAINE)</option>
+                <option value="fr">🇫🇷 FRANCE (Français)</option>
+                <option value="it">🇮🇹 ITALY (Italiano)</option>
+                <option value="es">🇪🇸 SPAIN (Español)</option>
+                <option value="pt">🇵🇹 PORTUGAL (Português)</option>
+                <option value="nl">🇳🇱 NETHERLANDS (Dutch)</option>
+                <option value="sv">🇸🇪 SWEDEN (Svenska)</option>
+                <option value="pl">🇵🇱 POLAND (Polski)</option>
+                <option value="uk">🇬🇷 GREECE (Ελληνικά)</option>
             </optgroup>
             <optgroup label="Asiya & Şərq">
-                <option value="ar">🇸🇦 ARABIC (SAUDI ARABIA)</option>
-                <option value="ja">🇯🇵 JAPANESE (JAPAN)</option>
-                <option value="ko">🇰🇷 KOREAN (KOREA)</option>
-                <option value="zh-CN">🇨🇳 CHINESE (CHINA)</option>
-                <option value="hi">🇮🇳 HINDI (INDIA)</option>
-                <option value="id">🇮🇩 INDONESIAN (INDONESIA)</option>
-                <option value="vi">🇻🇳 VIETNAMESE (VIETNAM)</option>
+                <option value="ar">🇸🇦 ARABIC (العربية)</option>
+                <option value="ja">🇯🇵 JAPAN (日本語)</option>
+                <option value="ko">🇰🇷 KOREA (한국어)</option>
+                <option value="zh-CN">🇨🇳 CHINA (中文)</option>
+                <option value="hi">🇮🇳 INDIA (हिन्दी)</option>
+                <option value="id">🇮🇩 INDONESIA (Bahasa)</option>
+                <option value="fa">🇮🇷 IRAN (فارسی)</option>
+                <option value="th">🇹🇭 THAILAND (ไทย)</option>
             </optgroup>
-            <optgroup label="Digər">
-                <option value="pt-BR">🇧🇷 PORTUGUÊS (BRAZIL)</option>
-                <option value="es-MX">🇲🇽 ESPAÑOL (MEXICO)</option>
-                <option value="fa">🇮🇷 PERSIAN (IRAN)</option>
+            <optgroup label="Amerika & Digər">
+                <option value="pt-BR">🇧🇷 BRAZIL (Português)</option>
+                <option value="es-MX">🇲🇽 MEXICO (Español)</option>
+                <option value="vi">🇻🇳 VIETNAM (Tiếng Việt)</option>
             </optgroup>
         </select>
     </div>
 
-    <div class="engine-room" id="engine-ui">
-        <div class="wave"></div>
-        <div class="wave" style="animation-delay: 0.4s"></div>
-        <button class="mic-btn" onclick="runEngine()">
-            <i class="fas fa-microphone-lines"></i>
-        </button>
-        <div id="status-text">SİSTEM HAZIRDIR</div>
-        <div style="font-size: 0.6rem; color: gray; margin-top: 5px;">TOXUNUN VƏ DANIŞIN</div>
+    <div class="engine-container" id="titan-ui">
+        <div class="mic-wrapper" onclick="toggleTitan()">
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring" style="animation-delay: 0.5s"></div>
+            <button class="mic-btn">
+                <i class="fas fa-microphone-lines"></i>
+            </button>
+        </div>
+        <div id="status">SİSTEM STANDBY-DADIR</div>
     </div>
 
     <div id="hud">
-        <div style="padding: 15px; text-align: right; border-bottom: 1px solid #222;">
-            <i class="fas fa-times-circle" onclick="closeHud()" style="font-size: 1.8rem; color: var(--magenta)"></i>
+        <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111;">
+            <span style="font-family:Orbitron; color:var(--neon); font-size:0.7rem;">TITAN CORE PROCESSOR</span>
+            <i class="fas fa-circle-chevron-down" onclick="closeHud()" style="font-size: 2rem; color: var(--magenta)"></i>
         </div>
         <div class="hud-scroll">
-            <div class="res-box">
-                <h5>INPUT DATA (AZ)</h5>
-                <p id="orig-out"></p>
+            <div class="result-card">
+                <h4>DATA SOURCE (AZ)</h4>
+                <p id="txt-orig"></p>
             </div>
-            <div class="res-box" style="border-left-color: var(--neon)">
-                <h5>NEURAL OUTPUT</h5>
-                <p id="trans-out" style="color: var(--neon)"></p>
+            <div class="result-card" style="border-left-color: var(--magenta)">
+                <h4>NEURAL OUTPUT</h4>
+                <p id="txt-trans" style="color: var(--neon)"></p>
             </div>
         </div>
-        <div class="bottom-actions">
-            <button class="btn btn-play" onclick="play()"><i class="fas fa-play"></i> SƏSLƏNDİR</button>
-            <button class="btn btn-share" onclick="share()"><i class="fas fa-share-alt"></i> PAYLAŞ</button>
+        <div class="footer-btns">
+            <button class="btn-action btn-play" onclick="play()"><i class="fas fa-play"></i> SƏSLƏNDİR</button>
+            <button class="btn-action btn-share" onclick="share()"><i class="fas fa-share-nodes"></i> PAYLAŞ</button>
         </div>
     </div>
 
     <script>
-        let recorder, bits = [], audioFile;
-        const ui = document.getElementById('engine-ui'), info = document.getElementById('status-text'), hud = document.getElementById('hud');
+        let rec, chunks = [], aUrl;
+        const ui = document.getElementById('titan-ui'), status = document.getElementById('status'), hud = document.getElementById('hud');
 
-        async function runEngine() {
-            if (!recorder || recorder.state === 'inactive') {
+        async function toggleTitan() {
+            if (!rec || rec.state === 'inactive') {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                recorder = new MediaRecorder(stream); bits = [];
-                recorder.onstart = () => { ui.classList.add('active'); info.innerText = "DİNLƏNİLİR..."; };
-                recorder.onstop = async () => {
-                    ui.classList.remove('active'); info.innerText = "TƏRCÜMƏ EDİLİR...";
-                    const fd = new FormData(); fd.append('audio_data', new Blob(bits)); fd.append('lang', document.getElementById('lang').value);
-                    const res = await fetch('/process_voice', { method: 'POST', body: fd });
-                    const d = await res.json();
-                    if(!d.error) {
-                        document.getElementById('orig-out').innerText = d.original;
-                        document.getElementById('trans-out').innerText = d.translated;
-                        audioFile = d.audio_url;
-                        hud.classList.add('active'); info.innerText = "HAZIR";
-                        play();
-                    }
+                rec = new MediaRecorder(stream); chunks = [];
+                rec.onstart = () => { ui.classList.add('active'); status.innerText = "DİNLƏNİLİR..."; };
+                rec.onstop = async () => {
+                    ui.classList.remove('active'); status.innerText = "TITAN EMAL EDİR...";
+                    const fd = new FormData(); fd.append('audio_data', new Blob(chunks)); fd.append('lang', document.getElementById('lang').value);
+                    try {
+                        const res = await fetch('/process_voice', { method: 'POST', body: fd });
+                        const d = await res.json();
+                        if(!d.error) {
+                            document.getElementById('txt-orig').innerText = d.original;
+                            document.getElementById('txt-trans').innerText = d.translated;
+                            aUrl = d.audio_url;
+                            hud.classList.add('active'); status.innerText = "HAZIR";
+                            play();
+                        }
+                    } catch(e) { status.innerText = "SİSTEM XƏTASI!"; }
                 };
-                recorder.ondataavailable = e => bits.push(e.data);
-                recorder.start();
-            } else { recorder.stop(); }
+                rec.ondataavailable = e => chunks.push(e.data);
+                rec.start();
+            } else { rec.stop(); }
         }
 
-        function play() { if(audioFile) new Audio(audioFile).play(); }
+        function play() { if(aUrl) new Audio(aUrl).play(); }
 
         async function share() {
-            if(!audioFile) return;
-            const r = await fetch(audioFile);
-            const b = await r.blob();
-            const f = new File([b], 'x-neural-omega.mp3', { type: 'audio/mp3' });
+            if(!aUrl) return;
+            const res = await fetch(aUrl);
+            const blob = await res.blob();
+            const file = new File([blob], 'x-titan-msg.mp3', { type: 'audio/mp3' });
             if (navigator.share) {
-                navigator.share({ files: [f], text: document.getElementById('trans-out').innerText });
+                navigator.share({ files: [file], text: document.getElementById('txt-trans').innerText });
             } else {
-                const a = document.createElement('a'); a.href = audioFile; a.download = 'x-neural.mp3'; a.click();
+                const a = document.createElement('a'); a.href = aUrl; a.download = 'translation.mp3'; a.click();
             }
         }
         function closeHud() { hud.classList.remove('active'); }
