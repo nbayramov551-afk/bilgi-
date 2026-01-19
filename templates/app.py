@@ -5,17 +5,17 @@ import os, uuid, asyncio, edge_tts
 
 app = Flask(__name__)
 
-# Neural Səslər Databazası
+# SƏS AYARLARI (Ultra Accurate)
 VOICE_DB = {
     'en': 'en-US-ChristopherNeural', 'tr': 'tr-TR-AhmetNeural', 'ru': 'ru-RU-DmitryNeural',
     'de': 'de-DE-ConradNeural', 'fr': 'fr-FR-HenriNeural', 'ar': 'ar-SA-HamedNeural',
     'it': 'it-IT-DiegoNeural', 'ja': 'ja-JP-KeitaNeural', 'ko': 'ko-KR-InJoonNeural',
-    'es': 'es-ES-AlvaroNeural'
+    'es': 'es-ES-AlvaroNeural', 'pt': 'pt-PT-DuarteNeural', 'hi': 'hi-IN-MadhurNeural',
+    'zh-CN': 'zh-CN-YunxiNeural'
 }
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def index(): return render_template('index.html')
 
 @app.route('/process_voice', methods=['POST'])
 def process_voice():
@@ -26,13 +26,15 @@ def process_voice():
         raw_p, clean_p = f"raw_{uid}.webm", f"clean_{uid}.wav"
         audio_file.save(raw_p)
 
-        # Səs təmizləmə (FFmpeg mütləqdir)
-        os.system(f"ffmpeg -i {raw_p} -af 'highpass=f=80, lowpass=f=8000, afftdn' -ar 16000 -ac 1 -y {clean_p}")
+        # MÜHƏNDİS FİLTERİ (Səs Təmizləmə)
+        os.system(f"ffmpeg -i {raw_p} -af 'highpass=f=80, lowpass=f=8000, afftdn, volume=2.0' -ar 16000 -ac 1 -y {clean_p}")
 
         rec = sr.Recognizer()
         with sr.AudioFile(clean_p) as source:
+            rec.dynamic_energy_threshold = True
             audio_data = rec.record(source)
             text = rec.recognize_google(audio_data, language='az-AZ')
+            
             translated = GoogleTranslator(source='az', target=lang_code).translate(text)
 
             if not os.path.exists('static'): os.makedirs('static')
@@ -52,4 +54,4 @@ def process_voice():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
-  
+    
