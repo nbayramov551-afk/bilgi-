@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>X-NEURAL v17 | ISMAIL SOVEREIGN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --neon: #00ffff; --magenta: #ff00ff; --gold: #ffd700; --bg: #000; --glass: rgba(255,255,255,0.05); }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline:none; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; overflow: hidden; height: 100vh; }
+
+        /* --- GİRİŞ ANİMASİYASI (SCANNER) --- */
+        #intro-layer { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s ease-in-out; }
+        .scanner-eye { width: 150px; height: 150px; border: 2px solid var(--neon); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 30px var(--neon); }
+        .scanner-eye::after { content: ''; position: absolute; width: 140%; height: 2px; background: var(--neon); animation: scanLine 2s infinite linear; }
+        @keyframes scanLine { 0% { top: 0; } 100% { top: 100%; } }
+
+        .app-container { visibility: hidden; opacity: 0; height: 100vh; display: flex; flex-direction: column; transition: 1s; }
+        .app-visible { visibility: visible !important; opacity: 1 !important; }
+
+        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.8); border-bottom: 1px solid var(--neon); }
+        .logo { font-family: 'Orbitron'; color: var(--neon); font-size: 1.2rem; letter-spacing: 5px; font-weight: 900; }
+
+        /* --- BAYRAQLAR VƏ SEÇİM --- */
+        .sel-wrapper { padding: 15px; }
+        #lang { width: 100%; background: #080808; color: var(--neon); border: 1px solid var(--neon); padding: 15px; border-radius: 15px; font-family: 'Orbitron'; font-size: 0.8rem; box-shadow: 0 0 15px rgba(0,255,255,0.1); }
+
+        /* --- SƏS DALĞASI --- */
+        .visualizer { height: 60px; display: flex; align-items: center; justify-content: center; gap: 5px; margin: 20px 0; }
+        .bar { width: 4px; height: 10px; background: var(--neon); border-radius: 10px; transition: 0.3s; }
+        .mic-btn.active + .visualizer .bar { animation: wave 1s infinite alternate; }
+        @keyframes wave { from { height: 10px; } to { height: 50px; background: var(--magenta); } }
+
+        /* --- ƏSAS MİKROFON --- */
+        .stage { padding: 40px; display: flex; flex-direction: column; align-items: center; }
+        .mic-btn { width: 130px; height: 130px; border-radius: 50%; border: 4px solid var(--neon); background: none; color: var(--neon); font-size: 4rem; cursor: pointer; transition: 0.5s; position: relative; }
+        .mic-btn.active { color: #fff; background: var(--magenta); border-color: var(--magenta); box-shadow: 0 0 60px var(--magenta); }
+
+        /* --- HUD (NƏTİCƏ PƏNCƏRƏSİ) --- */
+        #hud { position: fixed; bottom: 0; width: 100%; height: 85vh; background: #050505; border-top: 3px solid var(--neon); border-radius: 40px 40px 0 0; transform: translateY(110%); transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); z-index: 2000; display: flex; flex-direction: column; }
+        #hud.active { transform: translateY(0); }
+        .hud-content { flex: 1; overflow-y: auto; padding: 30px; }
+        .result-card { background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; }
+
+        /* --- HAQQIMDA (ABOUT) --- */
+        #about-panel { position: fixed; inset: 0; background: #000; z-index: 5000; transform: translateX(-100%); transition: 0.5s; padding: 50px 25px; }
+        #about-panel.open { transform: translateX(0); }
+
+        .footer-info { padding: 20px; font-size: 0.6rem; letter-spacing: 5px; color: #333; }
+    </style>
+</head>
+<body>
+
+    <div id="intro-layer">
+        <div class="scanner-eye"><i class="fas fa-user-secret" style="font-size:3rem; color:var(--neon)"></i></div>
+        <h2 style="font-family:'Orbitron'; color:var(--neon); margin-top:30px; letter-spacing:10px;">ISMAIL SOVEREIGN</h2>
+        <p style="color:#444; font-size:0.7rem;">AUTHORIZING NEURAL LINK...</p>
+    </div>
+
+    <div id="app" class="app-container">
+        <header>
+            <i class="fas fa-info-circle" onclick="toggleAbout()" style="font-size:1.5rem; color:var(--neon); cursor:pointer;"></i>
+            <div class="logo">X-NEURAL <span style="color:var(--magenta)">v17</span></div>
+            <i class="fas fa-shield-alt" style="font-size:1.5rem; color:var(--magenta)"></i>
+        </header>
+
+        <div class="sel-wrapper">
+            <select id="lang">
+                <optgroup label="ƏN ÇOX İSTİFADƏ">
+                    <option value="tr">🇹🇷 TURKISH (TR)</option>
+                    <option value="en">🇺🇸 ENGLISH (US)</option>
+                    <option value="ru">🇷🇺 RUSSIAN (RU)</option>
+                    <option value="de">🇩🇪 GERMAN (DE)</option>
+                </optgroup>
+                <optgroup label="DÜNYA DİLLƏRİ">
+                    <option value="fr">🇫🇷 FRENCH</option>
+                    <option value="ar">🇸🇦 ARABIC</option>
+                    <option value="it">🇮🇹 ITALIAN</option>
+                    <option value="ja">🇯🇵 JAPANESE</option>
+                    <option value="ko">🇰🇷 KOREAN</option>
+                    <option value="es">🇪🇸 SPANISH</option>
+                    <option value="pt">🇵🇹 PORTUGUESE</option>
+                    <option value="hi">🇮🇳 HINDI</option>
+                    <option value="zh-CN">🇨🇳 CHINESE</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="stage">
+            <button id="mic" class="mic-btn"><i class="fas fa-fingerprint"></i></button>
+            <div class="visualizer">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+            <p id="status-text" style="color:var(--neon); font-size:0.8rem; letter-spacing:3px;">SYSTEM READY</p>
+        </div>
+
+        <footer class="footer-info">DEVELOPED BY ISMAIL BAYRAMZADI</footer>
+    </div>
+
+    <div id="about-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h1 style="font-family:'Orbitron'; color:var(--neon);">DEV INFO</h1>
+            <i class="fas fa-times" onclick="toggleAbout()" style="font-size:2rem; cursor:pointer;"></i>
+        </div>
+        <div style="margin-top:40px; line-height:2;">
+            <p><b style="color:var(--magenta)">AUTHOR:</b> ISMAIL BAYRAMZADI</p>
+            <p><b style="color:var(--neon)">VERSION:</b> 17.0.4 (SOVEREIGN)</p>
+            <p><b style="color:var(--gold)">ENGINE:</b> X-NEURAL AI CORE</p>
+            <hr style="border:0; border-top:1px solid #222; margin:30px 0;">
+            <p style="font-size:0.9rem;">Bu layihə süni intellekt əsaslı səsdən-səsə tərcümə mühərrikidir. Mühəndis İsmail tərəfindən xüsusi olaraq dizayn edilmişdir.</p>
+        </div>
+    </div>
+
+    <div id="hud">
+        <div style="padding:25px; border-bottom:1px solid #111; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-family:'Orbitron'; color:var(--neon);">NEURAL DATA RECOVERY</span>
+            <i class="fas fa-chevron-down" onclick="closeHUD()" style="font-size:2rem; color:#333; cursor:pointer;"></i>
+        </div>
+        <div class="hud-content">
+            <div class="result-card">
+                <small style="color:var(--gold)">ORİJİNAL (AZ):</small>
+                <div id="orig" style="font-size:1.3rem; margin-top:10px; font-weight:300;"></div>
+            </div>
+            <div class="result-card" style="border-left:4px solid var(--neon);">
+                <small style="color:var(--neon)">TƏRCÜMƏ:</small>
+                <div id="trans" style="font-size:1.8rem; font-weight:900; margin-top:10px; color:#fff;"></div>
+            </div>
+        </div>
+        <div style="padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:15px; background:#000;">
+            <button onclick="playAudio()" style="padding:20px; background:var(--neon); border:none; border-radius:15px; font-family:'Orbitron'; font-weight:900;"><i class="fas fa-play"></i> DİNLƏ</button>
+            <button onclick="share()" style="padding:20px; background:none; border:2px solid #25D366; color:#25D366; border-radius:15px; font-family:'Orbitron'; font-weight:900;"><i class="fab fa-whatsapp"></i> PAYLAŞ</button>
+        </div>
+    </div>
+
+    <script>
+        const mic = document.getElementById('mic');
+        const hud = document.getElementById('hud');
+        const status = document.getElementById('status-text');
+        let mediaRecorder, chunks = [], currentAudio;
+
+        // GİRİŞ ANİMASİYASI
+        window.onload = () => { 
+            setTimeout(() => { 
+                document.getElementById('intro-layer').style.opacity = '0';
+                setTimeout(() => document.getElementById('intro-layer').style.display = 'none', 1000);
+                document.getElementById('app').classList.add('app-visible');
+            }, 3000); 
+        };
+
+        function toggleAbout() { document.getElementById('about-panel').classList.toggle('open'); }
+        function closeHUD() { hud.classList.remove('active'); }
+
+        mic.onclick = async () => {
+            if (!mediaRecorder || mediaRecorder.state === "inactive") {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.onstart = () => { 
+                    mic.classList.add('active'); 
+                    status.innerText = "LISTENING...";
+                    status.style.color = "var(--magenta)";
+                };
+                mediaRecorder.onstop = async () => {
+                    mic.classList.remove('active');
+                    status.innerText = "PROCESSING...";
+                    status.style.color = "var(--gold)";
+                    const fd = new FormData();
+                    fd.append('audio_data', new Blob(chunks));
+                    fd.append('lang', document.getElementById('lang').value);
+                    
+                    const res = await fetch('/process_voice', { method: 'POST', body: fd });
+                    const data = await res.json();
+                    
+                    if(!data.error) {
+                        document.getElementById('orig').innerText = data.original;
+                        document.getElementById('trans').innerText = data.translated;
+                        hud.classList.add('active');
+                        status.innerText = "DECODED";
+                        status.style.color = "var(--neon)";
+                        const audioRes = await fetch(data.audio_url);
+                        currentAudio = await audioRes.blob();
+                        new Audio(URL.createObjectURL(currentAudio)).play();
+                    } else {
+                        status.innerText = "ERROR";
+                        status.style.color = "red";
+                    }
+                };
+                mediaRecorder.ondataavailable = e => chunks.push(e.data);
+                chunks = []; mediaRecorder.start();
+            } else { mediaRecorder.stop(); }
+        };
+
+        function playAudio() { if(currentAudio) new Audio(URL.createObjectURL(currentAudio)).play(); }
+        async function share() { if(currentAudio && navigator.share) { const f = new File([currentAudio], "voice.mp3", {type: "audio/mp3"}); await navigator.share({files: [f], text: document.getElementById('trans').innerText}); } }
+    </script>
+</body>
+</html>
+
